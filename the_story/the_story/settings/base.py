@@ -12,6 +12,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
+
+def get_env_variable(var_name):
+    """환경변수를 가져오거나 예외를 반환"""
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(var_name)
+        raise ImproperlyConfigured(error_msg)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,7 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#ddh59&!*fw)*&vfnpk2!$#-ojf)u(sro$^b7(qq)a5@19q-=5'
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -69,17 +80,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'the_story.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
