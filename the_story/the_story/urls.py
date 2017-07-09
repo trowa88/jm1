@@ -13,9 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
+from rest_framework import routers
+
+from building.views import BuildingViewSet
+from the_story.settings import base
+from story_user.views import UserViewSet, GroupViewSet
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'buildings', BuildingViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
+
+urlpatterns += static('/upload_files/', document_root=base.MEDIA_ROOT)

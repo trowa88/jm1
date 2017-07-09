@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from building.models import Building
+from building.serializer import BuildingSerializer
+
+
+class BuildingViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing and editing building instances.
+    """
+    serializer_class = BuildingSerializer
+    queryset = Building.objects.all()
