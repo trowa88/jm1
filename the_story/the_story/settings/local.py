@@ -4,25 +4,15 @@ DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DB_HOST = get_env_variable('DB_HOST')
-DB_NAME = get_env_variable('DB_NAME')
-DB_USER = get_env_variable('DB_USER')
-DB_PASSWORD = get_env_variable('DB_PASSWORD')
-DB_PORT = get_env_variable('DB_PORT')
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'simple_test_db'
     }
 }
+
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+

@@ -23,6 +23,7 @@ def get_env_variable(var_name):
         error_msg = "Set the {} environment variable".format(var_name)
         raise ImproperlyConfigured(error_msg)
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -133,12 +134,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    )
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 OAUTH2_PROVIDER = {
@@ -146,4 +148,22 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope',
                'write': 'Write scope',
                'groups': 'Access to your groups'}
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DB_HOST = get_env_variable('DB_HOST')
+DB_NAME = get_env_variable('DB_NAME')
+DB_USER = get_env_variable('DB_USER')
+DB_PASSWORD = get_env_variable('DB_PASSWORD')
+DB_PORT = get_env_variable('DB_PORT')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT
+    }
 }
