@@ -8,5 +8,4 @@ class BuildingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Building
-        fields = ('user', 'name', 'description', 'img',
-                  'created', 'modified')
+        fields = ('user', 'name', 'description', 'img', 'created', 'modified')
