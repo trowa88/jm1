@@ -19,6 +19,7 @@ from django.contrib import admin
 from rest_framework import routers
 
 from building.views import BuildingViewSet
+from story_user import views
 from the_story.settings import base
 from story_user.views import UserViewSet, GroupViewSet
 
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    url(r'^sign_up/', views.SignUp.as_view(), name='sign_up'),
 ]
 
 urlpatterns += static('/upload_files/', document_root=base.MEDIA_ROOT)
