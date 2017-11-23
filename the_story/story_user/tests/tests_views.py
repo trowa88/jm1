@@ -7,8 +7,6 @@ from utils.base import APITestCaseAuthMixin
 
 class TheStoryUserTest(APITestCaseAuthMixin):
     def setUp(self):
-        self.test_user, self.auth = self.create_authorization()
-        self.client.credentials(HTTP_AUTHORIZATION=self.auth)
         self.valid_user = {
             'username': 'valid_user',
             'password': 'valid_password',
@@ -24,8 +22,8 @@ class TheStoryUserTest(APITestCaseAuthMixin):
         url = reverse('sign_up')
         response = self.client.post(url, self.valid_user, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, 'create failed')
-        self.assertEqual(2, User.objects.count())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(1, User.objects.count())
 
     def test_sign_up_invalid_user(self):
         url = reverse('sign_up')

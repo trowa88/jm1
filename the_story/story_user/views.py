@@ -24,3 +24,4 @@ class GroupViewSet(viewsets.ModelViewSet):
 class SignUp(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = []
