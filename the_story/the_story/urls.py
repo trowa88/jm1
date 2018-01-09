@@ -17,22 +17,28 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework import routers
+from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
+from rest_framework_swagger.views import get_swagger_view
 
 from building.views import BuildingViewSet
 from story_user import views
 from the_story.settings import base
 from story_user.views import UserViewSet, GroupViewSet
 
+
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'buildings', BuildingViewSet)
+
+schema_view = get_swagger_view(title='The Story API')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^sign_up/', views.SignUp.as_view(), name='sign_up'),
+    url(r'^$', schema_view),
 ]
 
 urlpatterns += static('/upload_files/', document_root=base.MEDIA_ROOT)

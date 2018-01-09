@@ -4,6 +4,7 @@ from rest_framework import status
 
 from building.models import Building
 from building.serializer import BuildingSerializer
+from comments.models import BuildingComment, BuildingCommentLike
 from utils.base import APITestCaseAuthMixin
 
 
@@ -14,6 +15,13 @@ class GetBuildingsTest(APITestCaseAuthMixin):
         self.a1 = Building.objects.create(user=self.test_user, name='a1', description='first building', img=None)
         self.a2 = Building.objects.create(user=self.test_user, name='a2', description='second building', img=None)
         self.a3 = Building.objects.create(user=self.test_user, name='a3', description='third building', img=None)
+
+        self.b1 = BuildingComment.objects.create(building=self.a1, building_comment=None, user=self.test_user,
+                                                 content='first comment')
+        self.c1 = BuildingComment.objects.create(building=self.a1, building_comment=self.b1, user=self.test_user,
+                                                 content='first comment comment')
+
+        self.d = BuildingCommentLike.objects.create(building_comment=self.b1, user=self.test_user)
 
     def test_get_all_buildings(self):
         url = reverse('api:building-list')
@@ -28,11 +36,13 @@ class GetBuildingsTest(APITestCaseAuthMixin):
         url = reverse('api:building-detail', kwargs={'pk': self.a1.pk})
         response = self.client.get(url, HTTP_AUTHORIZATION=self.auth)
         building = Building.objects.get(pk=self.a1.pk)
-        serializer = BuildingSerializer(building)
+        comment_count = BuildingComment.objects.filter(building=building).count()
+        serializer = BuildingSerializer(instance=building)
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get('user'), 'test_user')
+        self.assertEqual(response.data.get('user').get('username'), 'test_user')
+        self.assertEqual(len(response.data.get('building_comments')), comment_count)
 
     def test_get_invalid_single_building(self):
         url = reverse('api:building-detail', kwargs={'pk': 100})

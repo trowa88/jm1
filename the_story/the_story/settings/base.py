@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'comments.apps.CommentsConfig',
     'story_user.apps.StoryUserConfig',
+    'rest_framework_swagger',
 ]
 
 
@@ -166,4 +167,14 @@ DATABASES = {
         'HOST': DB_HOST,
         'PORT': DB_PORT
     }
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
 }
