@@ -27,7 +27,6 @@ def get_env_variable(var_name):
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -38,7 +37,6 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -57,7 +55,6 @@ INSTALLED_APPS = [
     'story_user.apps.StoryUserConfig',
     'rest_framework_swagger',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,7 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'the_story.wsgi.application'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -109,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -122,7 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -137,11 +131,36 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
+SWAGGER_SETTINGS = {
+    "exclude_namespaces": [],  # List URL namespaces to ignore
+    "api_version": '0.1',  # Specify your API's version
+    "api_path": "/api",  # Specify the path to your API not a root level
+    "enabled_methods": [  # Specify which methods to enable in Swagger UI
+        'get',
+        'post',
+        'put',
+        'patch',
+        'delete'
+    ],
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'basic',
+            'description': 'Personal API Key authorization',
+            'name': 'password'
+            # 'in': 'header',
+        }
+    },
+    "api_key": 'svf98sfd98wekjh',  # An API key
+    "is_authenticated": False,  # Set to True to enforce user authentication,
+    "is_superuser": False,  # Set to True to enforce admin only access
 }
 
 OAUTH2_PROVIDER = {
@@ -167,14 +186,4 @@ DATABASES = {
         'HOST': DB_HOST,
         'PORT': DB_PORT
     }
-}
-
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'api_key': {
-            'type': 'apiKey',
-            'in': 'header',
-            'name': 'Authorization'
-        }
-    },
 }
