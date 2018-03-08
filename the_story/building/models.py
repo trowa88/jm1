@@ -12,5 +12,8 @@ class Building(TimeStampedModel):
     def __repr__(self):
         return self.name
 
-    def get_description(self):
+    def building_description(self):
         return self.name + ': ' + self.description
+
+    def comment_list(self):
+        return self.building_comments.all().values()

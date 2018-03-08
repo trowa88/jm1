@@ -147,8 +147,7 @@ SWAGGER_SETTINGS = {
         'get',
         'post',
         'put',
-        'patch',
-        'delete'
+        'patch'
     ],
     'SECURITY_DEFINITIONS': {
         'api_key': {

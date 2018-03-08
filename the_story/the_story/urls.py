@@ -17,50 +17,28 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework import routers
-import oauth2_provider.views as oauth2_views
 from rest_framework_swagger.views import get_swagger_view
 
 from building.views import BuildingViewSet
+from comments.views import BuildingCommentViewSet, BuildingCommentLikeViewSet, BuildingPostCommentViewSet, \
+    BuildingPostCommentLikeViewSet
 from story_user import views
 from the_story.settings import base
-from story_user.views import UserViewSet, GroupViewSet
 
-router = routers.DefaultRouter()
-router.register(r'user', UserViewSet)
-router.register(r'group', GroupViewSet)
-router.register(r'building', BuildingViewSet)
+building_router = routers.DefaultRouter()
+building_router.register(r'building', BuildingViewSet)
+building_router.register(r'building-comment', BuildingCommentViewSet)
+building_router.register(r'building-comment-like', BuildingCommentLikeViewSet)
+building_router.register(r'building-post-comment', BuildingPostCommentViewSet)
+building_router.register(r'building-post-comment-like', BuildingPostCommentLikeViewSet)
 
-# OAuth2 provider endpoints
-oauth2_endpoint_views = [
-    url(r'^authorize/$', oauth2_views.AuthorizationView.as_view(), name="authorize"),
-    url(r'^token/$', oauth2_views.TokenView.as_view(), name="token"),
-    url(r'^revoke-token/$', oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
-]
-
-if base.DEBUG:
-    # OAuth2 Application Management endpoints
-    oauth2_endpoint_views += [
-        url(r'^applications/$', oauth2_views.ApplicationList.as_view(), name="list"),
-        url(r'^applications/register/$', oauth2_views.ApplicationRegistration.as_view(), name="register"),
-        url(r'^applications/(?P<pk>\d+)/$', oauth2_views.ApplicationDetail.as_view(), name="detail"),
-        url(r'^applications/(?P<pk>\d+)/delete/$', oauth2_views.ApplicationDelete.as_view(), name="delete"),
-        url(r'^applications/(?P<pk>\d+)/update/$', oauth2_views.ApplicationUpdate.as_view(), name="update"),
-    ]
-
-    # OAuth2 Token Management endpoints
-    oauth2_endpoint_views += [
-        url(r'^authorized-tokens/$', oauth2_views.AuthorizedTokensListView.as_view(), name="authorized-token-list"),
-        url(r'^authorized-tokens/(?P<pk>\d+)/delete/$', oauth2_views.AuthorizedTokenDeleteView.as_view(),
-            name="authorized-token-delete"),
-    ]
-
-schema_view = get_swagger_view(title='The Story API')
+schema_view = get_swagger_view(title='The Story API', url='/api/')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^', include(building_router.urls, namespace='api')),
     url(r'^o/', include('oauth2_provider.urls', namespace="oauth2_provider")),
-    url(r'^sign_up/', views.SignUp.as_view(), name='sign_up'),
+    url(r'^sign_up/', views.SignUp.as_view(), name='sign_up1'),
     url(r'^docs/', schema_view),
 ]
 

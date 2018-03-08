@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from oauth2_provider.models import Application, AccessToken
 from oauth2_provider.settings import oauth2_settings
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 
 
 class APITestCaseAuthMixin(APITestCase):
@@ -12,10 +12,11 @@ class APITestCaseAuthMixin(APITestCase):
     oauth toolkit authorized
     """
     oauth2_settings._SCOPES = ["read", "write"]
+    client = APIClient()
 
     def create_authorization(self):
         test_user = User.objects.create_user("test_user", "test@example.com", "123456")
-
+        self.client.force_authenticate(user=test_user)
         application = Application.objects.create(
             name="Test Application",
             redirect_uris="http://localhost http://example.com http://example.org",

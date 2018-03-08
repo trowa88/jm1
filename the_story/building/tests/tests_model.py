@@ -1,10 +1,7 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
 from rest_framework.test import APIRequestFactory, APITestCase
 
 from building.models import Building
-
-factory = APIRequestFactory()
 
 
 class BuildingTest(APITestCase):
@@ -17,6 +14,6 @@ class BuildingTest(APITestCase):
         building_a1 = Building.objects.get(name='A1')
         building_a2 = Building.objects.get(name='A2')
 
-        self.assertEqual(building_a1.get_description(), 'A1: first building')
-        self.assertEqual(building_a2.get_description(), 'A2: second building')
+        self.assertEqual(building_a1.building_description(), 'A1: first building')
+        self.assertEqual(building_a2.building_description(), 'A2: second building')
         self.assertEqual(building_a1.user.username, 'test')
